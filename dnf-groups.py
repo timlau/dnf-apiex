@@ -18,6 +18,26 @@ class DnfExample(DnfBase):
         grps = self.comps.groups
         for grp in grps:
             print("%-30s : %s" % (grp.id, grp.ui_name))
+        i = 0
+        for grp in grps:
+            i += 1
+            if i % 10 == 0:
+                self.show_group_packages(grp)
+
+    def show_group_packages(self, grp):
+        print("==== Group : %s ===================================" % grp.id)
+        if len(grp.mandatory_packages) > 0:
+            print(" === Mandatory Packages ===")
+            for pkg in grp.mandatory_packages:
+                print("  : %s " % pkg.name)
+        if len(grp.default_packages) > 0:
+            print(" === Default Packages ===")
+            for pkg in grp.default_packages:
+                print("  : %s "  % pkg.name)
+        if len(grp.optional_packages) > 0:
+            print(" === Optional Packages ===")
+            for pkg in grp.optional_packages:
+                print("  : %s " % pkg.name)
 
 if __name__ == "__main__":
     de = DnfExample()
