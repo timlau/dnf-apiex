@@ -127,15 +127,16 @@ class DnfBase(dnf.Base):
     class to encapsulate and extend the dnf.Base API
     '''
 
-    def __init__(self):
+    def __init__(self, setup_sack=True):
         dnf.Base.__init__(self)
         # setup the dnf cache
         self.setup_cache()
         # read the repository infomation
         self.read_all_repos()
-        # populate the dnf sack
-        self.fill_sack()
-        self._packages = Packages(self) # Define a Packages object
+        if setup_sack:
+            # populate the dnf sack
+            self.fill_sack()
+            self._packages = Packages(self) # Define a Packages object
 
     @property
     def packages(self):
