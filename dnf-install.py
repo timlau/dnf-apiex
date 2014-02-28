@@ -7,22 +7,21 @@ from __future__ import absolute_import
 import os
 from base import DnfBase
 
-# we need 0.4.16 for progress to work
+# we need 0.4.16 or later for the progress to work
+from dnf.callback import DownloadProgress
+class Progress(DownloadProgress):
 
-#from dnf.callback import DownloadProgress
-#class Progress(DownloadProgress):
-#
-#    def __init__(self):
-#        super(Progress, self).__init__()
+    def __init__(self):
+        super(Progress, self).__init__()
 
-#    def start(self, total_files, total_size):
-#        print("Start : ", total_files, total_size)
+    def start(self, total_files, total_size):
+        print("Start : ", total_files, total_size)
 
-#    def end(self,payload, status, msg):
-#        print ("End : ", str(payload), status, msg)
+    def end(self,payload, status, msg):
+        print ("End : ", str(payload), status, msg)
 
-#    def progress(self, payload, done):
-#        print ("Progress : ", str(payload), done)
+    def progress(self, payload, done):
+        print ("Progress : ", str(payload), done)
 
 
 
@@ -33,7 +32,7 @@ class DnfExample(DnfBase):
 
     def __init__(self):
         DnfBase.__init__(self)
-        #self.progress = Progress()
+        self.progress = Progress()
         print("=============== install btanks =====================")
         if os.getuid() != 0:
             print("You need to run this as root")
@@ -48,8 +47,7 @@ class DnfExample(DnfBase):
                 to_dnl.append(tsi.installed)
         print(to_dnl)
         print("Downloading Packages")
-        #print(self.download_packages(to_dnl, self.progress))
-        print(self.download_packages(to_dnl))
+        print(self.download_packages(to_dnl, self.progress))
         print("Running Transaction")
         print(self.do_transaction())
 
