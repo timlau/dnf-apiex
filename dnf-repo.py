@@ -5,8 +5,6 @@ from __future__ import absolute_import
 
 from base import DnfBase
 
-from dnf.yum.config import RepoConf
-
 # we need 0.4.16 or later for the progress to work
 from dnf.callback import DownloadProgress
 class MDProgress(DownloadProgress):
@@ -68,14 +66,8 @@ class DnfExample(DnfBase):
             if repo.id in to_disable:
                 repo.disable()
 
-    def find_repo(self,id):
-        for repo in self.repos.all:
-            if repo.id == id:
-                return repo
-        return None
-                
     def get_repo_attr(self, id):
-        repo = self.find_repo(id)
+        repo = self.repos.get(id, None) # get the repo object
         if repo:
             print("%-20s : %s" % ("id", str(repo.id)))
             for attr in repo.iterkeys():
