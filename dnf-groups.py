@@ -23,6 +23,11 @@ class DnfExample(DnfBase):
             i += 1
             if i % 10 == 0:
                 self.show_group_packages(grp)
+        cats = self.comps.categories
+        for cat in cats:
+            print(cat.name)
+            for grp in cat.group_ids: # groups_ids is not public api
+                print("    ", grp.name)
 
     def show_group_packages(self, grp):
         print("==== Group : %s ===================================" % grp.id)
