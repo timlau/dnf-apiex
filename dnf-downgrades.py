@@ -24,7 +24,7 @@ class DnfExample(DnfBase):
 
     def _get_downgrades(self, name, arch):
         ''' Find available downgrades for a given name.arch'''
-        q = self.sack.query()         # get the sack query object
+        q = self.sack.query()
         avail = q.available().filter(name=name, arch=arch).run()
         inst = q.installed().filter(name=name, arch=arch).run()
         downgrades = []
