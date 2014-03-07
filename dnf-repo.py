@@ -44,7 +44,7 @@ class DnfExample(DnfBase):
         # Enable & disable some repositories
         self.enable_repos(['updates-testing'])
         self.disable_repos(['Dropbox'])
-        self.repos.all.set_progress_bar(self.progress)  # Not public api
+        self.repos.all().set_progress_bar(self.progress)
         print("Enabled repositories : ")
         for repo in self.repos.iter_enabled():
             print("  : %s" % repo.id)
@@ -54,15 +54,15 @@ class DnfExample(DnfBase):
         self.get_repo_attr('updates')
 
     def find_repos(self, filter):
-        return self.repos.get_multiple(filter) # not public api
+        return self.repos.get_matching(filter)
 
     def enable_repos(self, to_enable):
-        for repo in self.repos.all: # not public api
+        for repo in self.repos.all():
             if repo.id in to_enable:
                 repo.enable()
 
-    def disable_repos(self, to_disable): # not public
-        for repo in self.repos.all:
+    def disable_repos(self, to_disable):
+        for repo in self.repos.all():
             if repo.id in to_disable:
                 repo.disable()
 
@@ -74,7 +74,7 @@ class DnfExample(DnfBase):
                 res = getattr(repo, attr)
                 print("%-20s : %s" % (attr, str(res)))
 
-        
+
 
 if __name__ == "__main__":
     de = DnfExample()

@@ -36,3 +36,4 @@ nosetests.xml
 .pydevproject
 /dnf_api_examples.nja
 /.settings/org.eclipse.core.resources.prefs
+/dnf-apiex.nja
