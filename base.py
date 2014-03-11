@@ -138,6 +138,10 @@ class DnfBase(dnf.Base):
             self.fill_sack()
             self._packages = Packages(self) # Define a Packages object
 
+    def setup_base(self):
+        self.fill_sack()
+        self._packages = Packages(self) # Define a Packages object
+
     @property
     def packages(self):
         ''' property to get easy acceess to packages'''
