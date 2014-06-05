@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from __future__ import print_function
 from __future__ import absolute_import
 
@@ -149,7 +148,7 @@ class DnfBase(dnf.Base):
 
     def setup_cache(self):
         conf = self.conf
-        conf.releasever = '20' # FIXME : this ugly, find a way to detect the release
+        conf.releasever = None # Will autoset the release
         # This is not public API, but we want the same cache as dnf cli
         suffix = dnf.yum.parser.varReplace(dnf.const.CACHEDIR_SUFFIX, conf.yumvar)
         cli_cache = dnf.conf.CliCache(conf.cachedir, suffix)
