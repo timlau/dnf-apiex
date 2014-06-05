@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
-
-from __future__ import print_function
 from __future__ import absolute_import
+from __future__ import print_function
+
+import sys
 
 import dnf.subject
 
@@ -15,16 +15,17 @@ class DnfExample(DnfBase):
 
     def __init__(self):
         DnfBase.__init__(self)
-        print("=============== packages matching yum* =====================")
-        subj = dnf.subject.Subject("yum*")
+        key = sys.argv[1]
+        subj = dnf.subject.Subject(key)
         qa = subj.get_best_query(self.sack, with_provides=False)
-        print("==== all packages  matching yum* =====")
+        qa = qa.available()
+        print("==== all packages  matching {} =====".format(key))
         for pkg in qa:
             print("  pkg : %-40s repo :  %-20s" % (pkg, pkg.reponame))
-        print("==== latest matching yum* =====")
+        print("==== latest matching {} =====".format(key))
         for pkg in qa.latest():
             print("  pkg : %-40s repo :  %-20s" % (pkg, pkg.reponame))
-        print("==== Installed matching yum* =====")
+        print("==== Installed matching {} =====".format(key))
         for pkg in qa.installed():
             print("  pkg : %-40s repo :  %-20s" % (pkg, pkg.reponame))
 
