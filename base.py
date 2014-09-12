@@ -146,13 +146,17 @@ class DnfBase(dnf.Base):
         ''' property to get easy acceess to packages'''
         return self._packages
 
-    def setup_cache(self):
+    def cachedir_fit(self):
         conf = self.conf
-        conf.releasever = None # Will autoset the release
-        # This is not public API, but we want the same cache as dnf cli
-        suffix = dnf.yum.parser.varReplace(dnf.const.CACHEDIR_SUFFIX, conf.yumvar)
+        subst = conf.substitutions
+        # this is not public API, same procedure as dnf cli
+        suffix = dnf.conf.parser.substitute(dnf.const.CACHEDIR_SUFFIX, subst)
         cli_cache = dnf.conf.CliCache(conf.cachedir, suffix)
-        conf.cachedir = cli_cache.cachedir
-        self._system_cachedir = cli_cache.system_cachedir
-        print("cachedir: %s" % conf.cachedir)
+        return cli_cache.cachedir, cli_cache.system_cachedir
 
+    def setup_cache(self):
+        """Setup the dnf cache, same as dnf cli"""
+        conf = self.conf
+        conf.substitutions['releasever'] = dnf.rpm.detect_releasever('/')
+        conf.cachedir, self._system_cachedir = self.cachedir_fit()
+        print("cachedir: %s", conf.cachedir)
