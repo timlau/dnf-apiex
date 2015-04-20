@@ -2,11 +2,38 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import hawkey
+import itertools
 import sys
 
 import dnf.subject
 
 from base import DnfBase
+
+
+ADV_INFO = """\
+============================ Advisory ==========================
+ID          : {0.id}
+Title       : {0.title}
+Type        : {1}
+
+Description:
+
+{0.description}
+
+"""
+
+REF_INFO = """\
+ {0.id} - {0.title}
+           {0.url}
+"""
+
+# Advisory types
+ADV_TYPES = {
+hawkey.ADVISORY_BUGFIX: "Bugfix",
+hawkey.ADVISORY_SECURITY: "Security",
+}
+
+
 
 class DnfExample(DnfBase):
     '''
@@ -22,12 +49,22 @@ class DnfExample(DnfBase):
         qa = qa.available()
         print("==== latest matching {} =====".format(key))
         for pkg in qa.latest():
-            print("  pkg : %-40s repo :  %-20s" % (pkg, pkg.reponame))
-            cmptypes = [hawkey.ADVISORY_BUGFIX, hawkey.ADVISORY_SECURITY,
-                       hawkey.ADVISORY_SECURITY]
-            for typ in cmptypes:
-                adv = pkg.get_advisories(typ)
-                print(adv)
+            print("pkg : %-40s repo :  %-20s" % (pkg, pkg.reponame))
+            # Get advisories for this package only
+            # hawkey.LT for versions Less than
+            # hawkey.GT for versions Greater than
+            advs = pkg.get_advisories(hawkey.EQ)
+            if advs:
+                adv = advs[0]
+                print(ADV_INFO.format(adv, ADV_TYPES[adv.type]))
+                if adv.references:
+                    print("References :\n")
+                    for ref in adv.references:
+                        print(REF_INFO.format(ref))
+
+            else:
+                print("  No advisory found for this packages")
+
 if __name__ == "__main__":
     de = DnfExample()
     del de

@@ -129,7 +129,8 @@ class DnfBase(dnf.Base):
     def __init__(self, setup_sack=True):
         dnf.Base.__init__(self)
         # setup the dnf cache
-        self.setup_cache()
+        RELEASEVER = dnf.rpm.detect_releasever(self.conf.installroot)
+        self.conf.substitutions['releasever'] = RELEASEVER
         # read the repository infomation
         self.read_all_repos()
         if setup_sack:
