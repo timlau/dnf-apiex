@@ -17,8 +17,12 @@ Title       : {0.title}
 Type        : {1}
 
 Description:
-
+============
 {0.description}
+
+Files:
+======
+{2}
 
 """
 
@@ -43,6 +47,9 @@ class DnfExample(DnfBase):
 
     def __init__(self):
         DnfBase.__init__(self)
+        if len(sys.argv) < 2:
+            print("USAGE: dnf-updateinfo <packagename>")
+            sys.exit(1)
         key = sys.argv[1]
         subj = dnf.subject.Subject(key)
         qa = subj.get_best_query(self.sack, with_provides=False)
@@ -56,7 +63,8 @@ class DnfExample(DnfBase):
             advs = pkg.get_advisories(hawkey.EQ)
             if advs:
                 adv = advs[0]
-                print(ADV_INFO.format(adv, ADV_TYPES[adv.type]))
+                fns = "\n".join(adv.filenames)
+                print(ADV_INFO.format(adv, ADV_TYPES[adv.type], fns))
                 if adv.references:
                     print("References :\n")
                     for ref in adv.references:
